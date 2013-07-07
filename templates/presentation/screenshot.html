@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block contents %}
+    <h1 class="header">{{ title }}</h1>
+
+    <table class="list tiles">
+        <tr>
+            <td class="tile" url="{{ next }}">
+                <img src="{{ image }}"/>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

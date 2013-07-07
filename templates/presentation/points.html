@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block contents %}
+    <h1 class="header">{{ title }}</h1>
+    
+    <table class="list tiles">
+        {% for point in points %}
+            <tr>
+                <td class="tile" url="{{ next }}">
+                    {{ point.title }}
+                    <span style="font-size: 70%">{{ point.subtitle }}</span>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
