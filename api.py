@@ -18,5 +18,8 @@ def urls():
         (r'^presentation/$', 'index'),
         (r'^presentation/(?P<page>\d+)?/$', 'index'),
         )+patterns('',
-        url(r'^presentation/static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': __file__.rsplit('/', 1)[0]+'/static/'}),
+        url(
+            r'^presentation/static/(?P<path>.*)$',
+            'django.views.static.serve',
+            {'document_root': __file__.rsplit('/', 1)[0]+'/static/'}),
     )
