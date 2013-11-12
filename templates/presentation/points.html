@@ -9,6 +9,9 @@
                 <td class="tile" url="{{ next }}">
                     {{ point.title }}
                     <span style="font-size: 70%">{{ point.subtitle }}</span>
+                    {% if point.image %}
+                        <img src="{{ point.image }}"/>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

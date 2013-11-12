@@ -1,61 +1,57 @@
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 
-def index(request):
-    return render(request, 'presentation/points.html', {
-        'title': 'Why?',
-        'points': [
-            {'title': 'I want a nice media player'},
-            {'title': 'XBMC is HUGE'},
-            {'title': 'XBMC is C++', 'subtitle': '(plugins in python not good enough)'},
-            {'title': 'XBMC has bugs'},
-            {'title': 'I don\'t ever want to write C++ again'},
-        ],
-        'next': '/presentation/2/',
-    })
 
-def part_2(request):
-    return render(request, 'presentation/points.html', {
-        'title': 'CMi Architecture',
-        'points': [
-            {'title': 'Django Backend'},
-            {'title': 'Objective-C Frontend'},
-            {'title': 'Video playing via VLCKit'},
-        ],
-        'next': '/presentation/3/',
-    })
+def index(request, page='0'):
+    page = int(page)
+    slides = [
+        ('Why?', [
+            'I want a nice media player',
+            'XBMC is HUGE',
+            ('XBMC is C++', '(plugins in python not good enough)'),
+            'XBMC has bugs',
+            "I don't ever want to write C++ again",
+        ]),
+        ('CMi Architecture', [
+            'Django Backend',
+            'Objective-C Frontend',
+            'Video playing via VLCKit',
+        ]),
+        ('CMi Features', [
+            ('AVI, MKV, H.264, etc', '(everything VLC supports)'),
+            'Apple Remote, Keyboard and Mouse navigation',
+            'Automatically discovers files in ~/Downloads',
+            'Episode names from thetvdb.com',
+            ('Remembers position', '(even if you lose power)'),
+            'Retina/HiDPI',
+            'Doctor Who!',
+            ('Tiny code base', '(937 lines python, 961 lines js, 815 lines ObjC)'),
+            'Weather :P',
+        ]),
+        ('This presentation is a CMi plugin!', [
+            ('', '', '/presentation/static/screenshot.png'),
+        ]),
+        ('CMi: Getting Involved', [
+            'github.com/boxed/cmi',
+            'MIT License',
+            'boxed@killingar.net',
+        ]),
+    ]
 
-def part_3(request):
-    return render(request, 'presentation/points.html', {
-        'title': 'CMi Features',
-        'points': [
-            {'title': 'AVI, MKV, H.264, etc', 'subtitle': '(everything VLC supports)'},
-            {'title': 'Apple Remote, Keyboard and Mouse navigation'},
-            {'title': 'Automatically discovers files in ~/Downloads'},
-            {'title': 'Episode names from thetvdb.com'},
-            {'title': 'Remembers position', 'subtitle': '(even if you lose power)'},
-            {'title': 'Retina/HiDPI'},
-            {'title': 'Doctor Who!'},
-            {'title': 'Tiny code base', 'subtitle': '(937 lines python, 961 lines js, 815 lines ObjC)'},
-            {'title': 'Weather :P'},
-        ],
-        'next': '/presentation/4/',
-    })
+    title, points = slides[page]
 
-def part_4(request):
-    return render(request, 'presentation/screenshot.html', {
-        'title': 'This presentation is a CMi plugin!',
-        'image': '/presentation/static/screenshot.png',
-        'next': '/presentation/5/',
-    })
+    def prepare_point(point):
+        if type(point) == tuple:
+            if len(point) > 2:
+                return {'title': point[0], 'subtitle': point[1], 'image': point[2]}
+            else:
+                return {'title': point[0], 'subtitle': point[1]}
+        else:
+            return {'title': point}
 
-def part_5(request):
-    return render(request, 'presentation/points.html', {
-        'title': 'CMi: Getting Involved',
-        'points': [
-            {'title': 'github.com/boxed/cmi'},
-            {'title': 'MIT License'},
-            {'title': 'boxed@killingar.net'},
-        ],
-    })
+    slide = {
+        'title': title,
+        'points': [prepare_point(x) for x in points],
+        'next': '/presentation/%s/' % (page + 1),
+    }
+
+    return render(request, 'presentation/points.html', slide)
